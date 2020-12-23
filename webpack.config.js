@@ -55,7 +55,16 @@ const config = {
 	    //   chunkFilename: '[id].css',
 	    //   ignoreOrder: false, // Enable to remove warnings about conflicting order
 	    // }),
-    ]
+    ],
+    optimization: {
+	    splitChunks: {
+	      	chunks (chunk) {
+	      	  	// exclude `my-excluded-chunk`
+	      	  	return chunk.name !== 'my-excluded-chunk';
+	      	}
+	    },
+	    runtimeChunk: true 
+	}
 }
 
 if (isDev) {
@@ -82,6 +91,10 @@ if (isDev) {
 		},	
 	}
 } else {
+	config.entry = {
+		app: path.join(__dirname, "src/index.js"),
+		vendor: ['vue']
+	}
 	config.output.filename = '[name].[chunkhash:8].js'
 	config.module.rules.push({
 		test: /\.styl/,
